@@ -14,6 +14,7 @@ export class Game {
         if (this.fallTimer < this.fallInterval) {
             return
         }
+        
         this.fallTimer -= this.fallInterval
 
         if (this.canMoveDown()) {
@@ -24,6 +25,7 @@ export class Game {
             this.saveShapeToGrid()
             this.spawnNewShape()
         }
+        this.clearLine()
     }
 
     canMoveRight() {
@@ -107,4 +109,13 @@ export class Game {
         this.shape.y = 0
     }
 
+    isLineFull(line) {
+        return line.every((e) => e !== 0)
+    }
+
+    clearLine() {
+        for (let i = 0; i < this.grid.length; i++ ) {
+            
+        }
+    }
 }
