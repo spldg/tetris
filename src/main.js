@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { GameScene } from './GameScene.js'
+import { Game } from './Game.js'
 
 const app = new PIXI.Application({
     resizeTo: window,
@@ -74,10 +75,29 @@ const grid = [
 const randomShape = shapes[Math.floor(Math.random() * shapes.length)]
 const shape = {
     currentShape: randomShape,
-    x: 4,
+    x: 3,
     y: 0
 }
 
 const gameScene = new GameScene(app, grid, shape)
-gameScene.drawGrid()
+const game = new Game(grid, shape, shapes)
+
 gameScene.renderShape()
+document.addEventListener('keydown', (e) => {
+    switch (e.key) {
+        case 'ArrowRight':
+            if (game.canMoveRight())
+                shape.x += 1
+            break
+        case 'ArrowLeft':
+            if (game.canMoveLeft())
+                shape.x -= 1
+            break
+    }
+})
+app.ticker.add((delta) => {
+    gameScene.drawGrid()
+    game.update(delta)
+    gameScene.renderShape()
+
+})
