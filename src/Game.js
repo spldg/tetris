@@ -1,11 +1,15 @@
-export class Game {
+import * as PIXI from 'pixi.js'
+import { FALL_INTERVAL } from './constants.js'
+
+export class Game extends PIXI.Container {
     constructor(grid, shape, shapes) {
+        super()
         this.grid = grid
         this.shape = shape
         this.shapes = shapes
 
         this.fallTimer = 0
-        this.fallInterval = 10
+        this.fallInterval = FALL_INTERVAL
     }
 
     update(delta) {

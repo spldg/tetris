@@ -1,16 +1,18 @@
 import * as PIXI from 'pixi.js'
+import { CELL_SIZE, FIELD_X, FIELD_Y } from './constants.js'
 
-export class GameScene {
+export class GameScene extends PIXI.Container {
     constructor(app, grid, shape) {
-
+        super()
+        
         this.app = app
         this.grid = grid
         this.shape = shape
 
-        this.startX = 100
-        this.startY = 100
+        this.startX = FIELD_X
+        this.startY = FIELD_Y
 
-        this.size = 20
+        this.size = CELL_SIZE
         this.gridRect = new PIXI.Graphics()
         this.shapeRect = new PIXI.Graphics()
 
@@ -25,15 +27,17 @@ export class GameScene {
                 const x = this.startX + this.size * j
                 const y = this.startY + this.size * i
                 if (this.grid[i][j] === 0) {
-                    this.gridRect.beginFill(0xFFFFFF)
-                    this.gridRect.lineStyle(2, 0x000000)
-                    this.gridRect.drawRect(x, y, this.size, this.size)
-                    this.gridRect.endFill()
+                    this.gridRect
+                    .beginFill(0xFFFFFF)
+                    .lineStyle(2, 0x000000)
+                    .drawRect(x, y, this.size, this.size)
+                    .endFill()
                 } else {
-                    this.gridRect.beginFill(0x000000)
-                    this.gridRect.lineStyle(1, 0xFFFFFF)
-                    this.gridRect.drawRect(x, y, this.size, this.size)
-                    this.gridRect.endFill()
+                    this.gridRect
+                    .beginFill(0x000000)
+                    .lineStyle(1, 0xFFFFFF)
+                    .drawRect(x, y, this.size, this.size)
+                    .endFill()
                 }
             }
         }
@@ -50,10 +54,11 @@ export class GameScene {
                     const x = this.startX + gridX * this.size
                     const y = this.startY + gridY * this.size
 
-                    this.shapeRect.beginFill(0x000000)
-                    this.shapeRect.lineStyle(1, 0xFFFFFF)
-                    this.shapeRect.drawRect(x, y, this.size, this.size)
-                    this.shapeRect.endFill()
+                    this.shapeRect
+                    .beginFill(0x000000)
+                    .lineStyle(1, 0xFFFFFF)
+                    .drawRect(x, y, this.size, this.size)
+                    .endFill()
                 }
             }
         }

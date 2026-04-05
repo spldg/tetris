@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js'
 import { GameScene } from './GameScene.js'
 import { Game } from './Game.js'
+import { SHAPES } from './constants.js'
 
 const app = new PIXI.Application({
     resizeTo: window,
@@ -12,75 +13,15 @@ document
     .getElementById("pixi-container")
     .appendChild(app.view)
 
-const shapes = [
-    [
-        [1, 1],
-        [1, 1],
-    ],
-    [
-        [0, 0, 0, 0],
-        [1, 1, 1, 1],
-        [0, 0, 0, 0],
-    ],
-    [
-        [1, 1, 0],
-        [0, 1, 1],
-        [0, 0, 0],
-    ],
-    [
-        [0, 1, 1],
-        [1, 1, 0],
-        [0, 0, 0],
-    ],
-    [
-        [0, 1, 0, 0],
-        [0, 1, 1, 1],
-        [0, 0, 0, 0],
-    ],
-    [
-        [0, 0, 1],
-        [1, 1, 1],
-        [0, 0, 0],
-    ],
-    [
-        [0, 1, 0],
-        [1, 1, 1],
-        [0, 0, 0],
-    ]
-]
-
-const grid = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-]
-
-const randomShape = shapes[Math.floor(Math.random() * shapes.length)]
+const randomShape = SHAPES[Math.floor(Math.random() * SHAPES.length)]
 const shape = {
     currentShape: randomShape,
     x: 3,
     y: 0
 }
 
-const gameScene = new GameScene(app, grid, shape)
-const game = new Game(grid, shape, shapes)
+const gameScene = new GameScene()
+const game = new Game()
 
 gameScene.renderShape()
 document.addEventListener('keydown', (e) => {
