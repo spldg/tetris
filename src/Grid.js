@@ -26,16 +26,16 @@ export class Grid extends PIXI.Container {
                 const x = this.cellSize * j
                 const y = this.cellSize * i
 
-                if ( cell === 0) {
+                if (cell === 0) {
                     this.#graphics
                         .beginFill(0xFFFFFF)
-                        .lineStyle(1, 0x000000)
+                        .lineStyle({width: 1, color: 0x000000, native: true})
                         .drawRect(x, y, this.cellSize, this.cellSize)
                         .endFill()
                 } else {
                     this.#graphics
                         .beginFill(0x000000)
-                        .lineStyle(1, 0xFFFFFF)
+                        .lineStyle({width: 1, color: 0xFFFFFF, native: true})
                         .drawRect(x, y, this.cellSize, this.cellSize)
                         .endFill()
                 }

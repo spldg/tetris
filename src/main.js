@@ -13,6 +13,16 @@ document
 const gameScene = new GameScene()
 app.stage.addChild(gameScene)
 
-app.ticker.add((delta) => {
+function resize() {
+    const width = window.innerWidth
+    const height = window.innerHeight
 
+    gameScene.resize(width, height)
+}
+resize()
+
+window.addEventListener('resize', resize)
+
+app.ticker.add((delta) => {
+    gameScene.gameField.update(delta)
 })
