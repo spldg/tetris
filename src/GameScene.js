@@ -1,14 +1,17 @@
 import * as PIXI from 'pixi.js'
 import { GameField } from './GameField.js'
-import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE} from './constants.js'
+import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from './constants.js'
 
 export class GameScene extends PIXI.Container {
     gameField = new GameField()
 
     constructor() {
         super()
-        
+
         this.addChild(this.gameField)
+    }
+    update(delta) {
+        this.gameField.update(delta)
     }
 
     resize(width, height) {
@@ -21,5 +24,17 @@ export class GameScene extends PIXI.Container {
 
         this.gameField.x = (width - fieldWidth * scale) / 2
         this.gameField.y = (height - fieldHeight * scale) / 2
+    }
+
+    moveLeft() {
+        this.gameField.moveLeft()
+    }
+
+    moveRight() {
+        this.gameField.moveRight()
+    }
+
+    rotate() {
+        this.gameField.rotate()
     }
 }

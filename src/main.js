@@ -22,7 +22,20 @@ function resize() {
 resize()
 
 window.addEventListener('resize', resize)
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'ArrowLeft') {
+        gameScene.moveLeft()
+    }
+
+    if (e.code === 'ArrowRight') {
+        gameScene.moveRight()
+    }
+
+    if (e.code === 'ArrowUp') {
+        gameScene.rotate()
+    }
+})
 
 app.ticker.add((delta) => {
-    gameScene.gameField.update(delta)
+    gameScene.update(delta)
 })

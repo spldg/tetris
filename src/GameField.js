@@ -1,19 +1,16 @@
 import * as PIXI from 'pixi.js'
 import { CELL_SIZE, FALL_INTERVAL, SHAPES, SPAWN_X, SPAWN_Y } from './constants.js'
 import { Grid } from './Grid.js'
+import { Shape } from './Shape.js'
 
 export class GameField extends PIXI.Container {
-    grid = new Grid()
     #fallTimer = 0
     #fallInterval = FALL_INTERVAL
 
+    grid = new Grid()
     shapeGraphics = new PIXI.Graphics()
 
     currentShape = null
-    shapeX = SPAWN_X
-    shapeY = SPAWN_Y
-
-    gridData = this.grid.grid
 
     constructor() {
         super()
@@ -36,84 +33,61 @@ export class GameField extends PIXI.Container {
 
     fallUpdate() {
         if (!this.currentShape) {
-            this.switchShape()
+            this.spawnShape()
+            return
         }
-
-        if (!this.isColliding()) {
-            this.shapeY += 1
+        if (!this.grid.canPlace(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.move(0, 1)
         } else {
-            this.saveShapeToGrid()
-            this.switchShape()
+            this.grid.saveShapeToGrid(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)
+            this.spawnShape()
         }
     }
 
-  
+    rotate() {
+        if (!this.currentShape) {
+            return
+        }
+
+        this.currentShape.rotate()
+    }
+
+    moveLeft() {
+        this.currentShape.move(-1, 0)
+        if (this.grid.canPlace(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.move(1, 0)
+        }
+
+    }
+
+    moveRight() {
+        this.currentShape.move(1, 0)
+        if (this.grid.canPlace(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.move(-1, 0)
+        }
+    }
 
     drawCurrentShape() {
         this.shapeGraphics.clear()
 
-        const shape = this.currentShape
+        const shape = this.currentShape.getCells()
 
-        for (let i = 0; i < shape.length; i++) {
-            for (let j = 0; j < shape[i].length; j++) {
-                if (shape[i][j] === 1) {
+        for (const cell of shape) {
+            const x = cell.x * CELL_SIZE
+            const y = cell.y * CELL_SIZE
 
-                    const x = (this.shapeX + j) * CELL_SIZE
-                    const y = (this.shapeY + i) * CELL_SIZE
-
-                    this.shapeGraphics
-                        .beginFill(0x000000)
-                        .lineStyle({ width: 1, color: 0xFFFFFF, native: true })
-                        .drawRect(x, y, CELL_SIZE, CELL_SIZE)
-                        .endFill()
-                }
-            }
+            this.shapeGraphics
+                .beginFill(0x000000)
+                .lineStyle({ width: 1, color: 0xFFFFFF, native: true })
+                .drawRect(x, y, CELL_SIZE, CELL_SIZE)
+                .endFill()
         }
     }
 
-    saveShapeToGrid() {
-        const shape = this.currentShape
-        for (let i = 0; i < shape.length; i++) {
-            for (let j = 0; j < shape[i].length; j++) {
-                if (shape[i][j] === 1) {
-                    const gridX = this.shapeX + j
-                    const gridY = this.shapeY + i
-
-                    this.gridData[gridY][gridX] = 1
-                    console.log('saved')
-                }
-            }
-        }
-        this.grid.draw()
-    }
-
-    switchShape() {
+    spawnShape() {
         const randomShape = SHAPES[Math.floor(Math.random() * SHAPES.length)]
+        this.currentShape = new Shape()
 
-        this.currentShape = randomShape
-        this.shapeX = SPAWN_X
-        this.shapeY = SPAWN_Y
-    }
-
-    isColliding() {
-        const shape = this.currentShape
-
-        for (let i = 0; i < shape.length; i++) {
-            for (let j = 0; j < shape[i].length; j++) {
-                if (shape[i][j] === 1) {
-                    const gridX = this.shapeX + j
-                    const nextY = this.shapeY + i + 1
-
-                    if (nextY >= this.gridData.length) {
-                        return true
-                    }
-
-                    if (this.gridData[nextY][gridX] !== 0) {
-                        return true
-                    }
-                }
-            }
-        }
-        return false
+        this.currentShape.init(randomShape, SPAWN_X, SPAWN_Y)
     }
 }
