@@ -1,17 +1,27 @@
 import * as PIXI from 'pixi.js'
 import { GameField } from './GameField.js'
 import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from './constants.js'
+import { RestartButton } from './RestartButton.js'
 
 export class GameScene extends PIXI.Container {
-    gameField = new GameField()
+    #gameField = new GameField()
+    #restartButton = new RestartButton()
 
     constructor() {
         super()
 
-        this.addChild(this.gameField)
+        this.#restartButton.draw()
+
+        this.addChild(this.#gameField, this.#restartButton)
+        this.#initKeys()
+        this.onClick()
     }
     update(delta) {
-        this.gameField.update(delta)
+        this.#gameField.update(delta)
+
+        if (this.#gameField.isGameOver) {
+            this.#restartButton.show()
+        }
     }
 
     resize(width, height) {
@@ -20,21 +30,49 @@ export class GameScene extends PIXI.Container {
 
         const scale = Math.min(1, width / fieldWidth, height / fieldHeight)
 
-        this.gameField.scale.set(scale)
+        this.scale.set(scale)
 
-        this.gameField.x = (width - fieldWidth * scale) / 2
-        this.gameField.y = (height - fieldHeight * scale) / 2
+        this.x = width / 2
+        this.y = height / 2
+    }
+
+    #initKeys() {
+        window.addEventListener('keydown', this.#onKey)
+    }
+
+    onClick() {
+        this.#restartButton.interactive = true
+
+        this.#restartButton.on('pointertap', () => {
+            this.#gameField.clear()
+            this.#restartButton.hide()
+            console.log('somethign')
+        })
+    }
+
+    #onKey = (e) => {
+        switch (e.key) {
+            case 'ArrowLeft':
+                this.moveLeft()
+                break
+            case 'ArrowRight':
+                this.moveRight()
+                break
+            case 'ArrowUp':
+                this.rotate()
+                break
+        }
     }
 
     moveLeft() {
-        this.gameField.moveLeft()
+        this.#gameField.moveLeft()
     }
 
     moveRight() {
-        this.gameField.moveRight()
+        this.#gameField.moveRight()
     }
 
     rotate() {
-        this.gameField.rotate()
+        this.#gameField.rotate()
     }
 }

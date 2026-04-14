@@ -7,15 +7,15 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default merge(common, {
-  mode: 'development',
-  devtool: 'inline-source-map',
+    mode: 'development',
+    devtool: 'inline-source-map',
 
-  devServer: {
-    static: path.resolve(__dirname, 'dist'),
-    port: 3000,
-    open: true,
-    hot: true,
-  },
+    devServer: {
+        static: path.resolve(__dirname, 'dist'),
+        port: 3000,
+        open: true,
+        hot: true,
+    },
 
-  stats: 'minimal',
+    stats: 'minimal',
 })

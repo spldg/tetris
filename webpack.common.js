@@ -6,17 +6,17 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default {
-  entry: './src/main.js',
+    entry: './src/main.js',
 
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-    })
-  ],
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+        })
+    ],
 
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    clean: true,
-  }
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'bundle.js',
+        clean: true,
+    }
 }

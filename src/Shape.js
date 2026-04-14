@@ -3,9 +3,6 @@ export class Shape {
 
     x = 0
     y = 0
-    constructor() {
-
-    }
 
     init(matrix, x, y) {
         this.matrix = matrix.map((row) => [...row])
@@ -13,8 +10,8 @@ export class Shape {
         this.x = x
         this.y = y
     }
-    
-    move(x,y) {
+
+    move(x, y) {
         this.x += x
         this.y += y
     }
@@ -22,11 +19,7 @@ export class Shape {
     rotate() {
         const n = this.matrix.length
 
-        let result = []
-
-        for (let i = 0; i < n; i++) {
-            result.push(new Array(n).fill(0))
-        }
+        let result = Array.from({length: n }, () => new Array(n).fill(0))
 
         for (let i = 0; i < n; i++) {
             for (let j = 0; j < n; j++) {
@@ -43,8 +36,8 @@ export class Shape {
             for (let j = 0; j < this.matrix[i].length; j++) {
                 if (this.matrix[i][j] === 1) {
                     cells.push({
-                        x:this.x + j,
-                        y:this.y + i
+                        x: this.x + j,
+                        y: this.y + i
                     })
                 }
             }

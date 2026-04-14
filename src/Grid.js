@@ -4,7 +4,7 @@ import { CELL_SIZE, GRID_HEIGHT, GRID_WIDTH } from './constants.js'
 export class Grid extends PIXI.Container {
     #graphics = new PIXI.Graphics()
     grid = this.#createEmptyGrid()
-    cellSize = CELL_SIZE
+    
     constructor() {
         super()
 
@@ -38,20 +38,20 @@ export class Grid extends PIXI.Container {
         for (let i = 0; i < GRID_HEIGHT; i++) {
             for (let j = 0; j < GRID_WIDTH; j++) {
                 const cell = this.grid[i][j]
-                const x = this.cellSize * j
-                const y = this.cellSize * i
+                const x = CELL_SIZE * j
+                const y = CELL_SIZE * i
 
                 if (cell === 0) {
                     this.#graphics
                         .beginFill(0xFFFFFF)
                         .lineStyle({ width: 1, color: 0x000000, native: true })
-                        .drawRect(x, y, this.cellSize, this.cellSize)
+                        .drawRect(x, y, CELL_SIZE, CELL_SIZE)
                         .endFill()
                 } else {
                     this.#graphics
                         .beginFill(0x000000)
                         .lineStyle({ width: 1, color: 0xFFFFFF, native: true })
-                        .drawRect(x, y, this.cellSize, this.cellSize)
+                        .drawRect(x, y, CELL_SIZE, CELL_SIZE)
                         .endFill()
                 }
             }
@@ -86,5 +86,10 @@ export class Grid extends PIXI.Container {
             }
         }
         return false
+    }
+
+    clearGrid () {
+       this.grid = this.#createEmptyGrid()
+       this.draw()
     }
 }
