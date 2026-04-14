@@ -30,7 +30,7 @@ export class GameScene extends PIXI.Container {
     }
 
     resize(width, height) {
-        const fieldWidth = CELL_SIZE * GRID_WIDTH
+        const fieldWidth = CELL_SIZE * GRID_WIDTH + 50
         const fieldHeight = CELL_SIZE * GRID_HEIGHT + 100
 
         const scale = Math.min(1, width / fieldWidth, height / fieldHeight)
