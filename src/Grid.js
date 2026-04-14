@@ -28,8 +28,10 @@ export class Grid extends PIXI.Container {
                 }
             }
         }
-        this.#clearLines()
+        const cleared = this.#clearLines()
         this.#draw()
+
+        return cleared
     }
 
     #draw() {
@@ -59,13 +61,18 @@ export class Grid extends PIXI.Container {
     }
 
     #clearLines() {
+        let cleared = 0
+
         for (let i = this.#grid.length - 1;i >= 0; i--) {
             if (this.#grid[i].every((e) => e === 1)) {
                 this.#grid.splice(i, 1)
                 this.#grid.unshift(Array(GRID_WIDTH).fill(0))
                 i++
+                cleared++
             }
         }
+
+        return cleared
     }
 
     collide(shape,x,y) {
@@ -73,13 +80,16 @@ export class Grid extends PIXI.Container {
             for (let j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] === 1) {
                     const gridX = x + j
-                    const nextY = y + i + 1
+                    const gridY = y + i
 
-                    if (nextY >= this.#grid.length) {
+                    if (gridX < 0 ||
+                        gridX >= GRID_WIDTH ||
+                        gridY >= GRID_HEIGHT 
+                    ) {
                         return true
                     }
 
-                    if (this.#grid[nextY][gridX] !== 0) {
+                    if (gridY >= 0 && this.#grid[gridY][gridX] !== 0) {
                         return true
                     }
                 }

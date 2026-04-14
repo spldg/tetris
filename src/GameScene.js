@@ -2,20 +2,27 @@ import * as PIXI from 'pixi.js'
 import { GameField } from './GameField.js'
 import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from './constants.js'
 import { RestartButton } from './RestartButton.js'
+import { Score } from './Score.js'
 
 export class GameScene extends PIXI.Container {
     #gameField = new GameField()
     #restartButton = new RestartButton()
+    #scoreText = new Score()
 
     constructor() {
         super()
 
+        this.#scoreText.x = -150
+        this.#scoreText.y = -300
+
         this.#initKeys()
         this.#onClick()
-        this.addChild(this.#gameField, this.#restartButton)
+        this.addChild(this.#gameField, this.#restartButton, this.#scoreText)
     }
     update(delta) {
         this.#gameField.update(delta)
+
+        this.#scoreText.setScore(this.#gameField.score)
 
         if (this.#gameField.isGameOver) {
             this.#restartButton.show()
@@ -24,7 +31,7 @@ export class GameScene extends PIXI.Container {
 
     resize(width, height) {
         const fieldWidth = CELL_SIZE * GRID_WIDTH
-        const fieldHeight = CELL_SIZE * GRID_HEIGHT
+        const fieldHeight = CELL_SIZE * GRID_HEIGHT + 100
 
         const scale = Math.min(1, width / fieldWidth, height / fieldHeight)
 

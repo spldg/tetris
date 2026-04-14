@@ -10,6 +10,8 @@ export class GameField extends PIXI.Container {
     #grid = new Grid()
     #shapeGraphics = new PIXI.Graphics()
 
+    score = 0
+
     #currentShape = null
     isGameOver = false
 
@@ -42,10 +44,12 @@ export class GameField extends PIXI.Container {
             this.#spawnShape()
             return
         }
-        if (!this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)) {
+        if (!this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y + 1)) {
             this.#currentShape.move(0, 1)
         } else {
-            this.#grid.saveShapeToGrid(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)
+            const cleared = this.#grid.saveShapeToGrid(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)
+            this.#addScore(cleared)
+            console.log(this.score)
             this.#spawnShape()
         }
     }
@@ -71,6 +75,10 @@ export class GameField extends PIXI.Container {
     }
 
     moveLeft() {
+        if (!this.#currentShape) {
+            return
+        }
+
         this.#currentShape.move(-1, 0)
         if (this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)) {
             this.#currentShape.move(1, 0)
@@ -79,6 +87,10 @@ export class GameField extends PIXI.Container {
     }
 
     moveRight() {
+        if (!this.#currentShape) {
+            return
+        }
+
         this.#currentShape.move(1, 0)
         if (this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)) {
             this.#currentShape.move(-1, 0)
@@ -100,6 +112,22 @@ export class GameField extends PIXI.Container {
                 .drawRect(x, y, CELL_SIZE, CELL_SIZE)
                 .endFill()
         }
+    }
+    #addScore(lines) {
+        const scoreTab = {
+            1: 100,
+            2: 300,
+            3: 500,
+            4: 800,
+        }
+
+        const base = scoreTab[lines] || 0
+
+        const points = base
+
+        this.score += points
+
+        return points
     }
 
     #spawnShape() {
