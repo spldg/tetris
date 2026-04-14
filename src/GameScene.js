@@ -10,11 +10,9 @@ export class GameScene extends PIXI.Container {
     constructor() {
         super()
 
-        this.#restartButton.draw()
-
-        this.addChild(this.#gameField, this.#restartButton)
         this.#initKeys()
-        this.onClick()
+        this.#onClick()
+        this.addChild(this.#gameField, this.#restartButton)
     }
     update(delta) {
         this.#gameField.update(delta)
@@ -40,7 +38,7 @@ export class GameScene extends PIXI.Container {
         window.addEventListener('keydown', this.#onKey)
     }
 
-    onClick() {
+    #onClick() {
         this.#restartButton.interactive = true
 
         this.#restartButton.on('pointertap', () => {
@@ -53,26 +51,26 @@ export class GameScene extends PIXI.Container {
     #onKey = (e) => {
         switch (e.key) {
             case 'ArrowLeft':
-                this.moveLeft()
+                this.#moveLeft()
                 break
             case 'ArrowRight':
-                this.moveRight()
+                this.#moveRight()
                 break
             case 'ArrowUp':
-                this.rotate()
+                this.#rotate()
                 break
         }
     }
 
-    moveLeft() {
+    #moveLeft() {
         this.#gameField.moveLeft()
     }
 
-    moveRight() {
+    #moveRight() {
         this.#gameField.moveRight()
     }
 
-    rotate() {
+    #rotate() {
         this.#gameField.rotate()
     }
 }

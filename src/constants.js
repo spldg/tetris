@@ -6,7 +6,7 @@ export const CELL_SIZE = 30
 export const SPAWN_X = 3
 export const SPAWN_Y = 0
 
-export const FALL_INTERVAL = 2
+export const FALL_INTERVAL = 7
 
 export const BUTTON_SIZE_W = 145
 export const BUTTON_SIZE_H = 45

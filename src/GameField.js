@@ -10,7 +10,7 @@ export class GameField extends PIXI.Container {
     #grid = new Grid()
     #shapeGraphics = new PIXI.Graphics()
 
-    currentShape = null
+    #currentShape = null
     isGameOver = false
 
     constructor() {
@@ -33,62 +33,62 @@ export class GameField extends PIXI.Container {
 
         this.#fallTimer -= this.#fallInterval
 
-        this.fallUpdate()
-        this.drawCurrentShape()
+        this.#fallUpdate()
+        this.#drawCurrentShape()
     }
 
-    fallUpdate() {
-        if (!this.currentShape) {
-            this.spawnShape()
+    #fallUpdate() {
+        if (!this.#currentShape) {
+            this.#spawnShape()
             return
         }
-        if (!this.#grid.canPlace(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
-            this.currentShape.move(0, 1)
+        if (!this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)) {
+            this.#currentShape.move(0, 1)
         } else {
-            this.#grid.saveShapeToGrid(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)
-            this.spawnShape()
+            this.#grid.saveShapeToGrid(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)
+            this.#spawnShape()
         }
     }
 
     clear() {
         this.#grid.clearGrid()
-        this.currentShape = null
+        this.#currentShape = null
         this.isGameOver = false
     }
 
     rotate() {
-        if (!this.currentShape) {
+        if (!this.#currentShape) {
             return
         }
-        const prev = this.currentShape.matrix
+        const prev = this.#currentShape.matrix
 
-        this.currentShape.rotate()
+        this.#currentShape.rotate()
 
 
-        if (this.#grid.canPlace(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
-            this.currentShape.matrix = prev
+        if (this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)) {
+            this.#currentShape.matrix = prev
         }
     }
 
     moveLeft() {
-        this.currentShape.move(-1, 0)
-        if (this.#grid.canPlace(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
-            this.currentShape.move(1, 0)
+        this.#currentShape.move(-1, 0)
+        if (this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)) {
+            this.#currentShape.move(1, 0)
         }
 
     }
 
     moveRight() {
-        this.currentShape.move(1, 0)
-        if (this.#grid.canPlace(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
-            this.currentShape.move(-1, 0)
+        this.#currentShape.move(1, 0)
+        if (this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)) {
+            this.#currentShape.move(-1, 0)
         }
     }
 
-    drawCurrentShape() {
+    #drawCurrentShape() {
         this.#shapeGraphics.clear()
 
-        const shape = this.currentShape.getCells()
+        const shape = this.#currentShape.getCells()
 
         for (const cell of shape) {
             const x = cell.x * CELL_SIZE
@@ -102,13 +102,13 @@ export class GameField extends PIXI.Container {
         }
     }
 
-    spawnShape() {
+    #spawnShape() {
         const randomShape = SHAPES[Math.floor(Math.random() * SHAPES.length)]
-        this.currentShape = new Shape()
+        this.#currentShape = new Shape()
 
-        this.currentShape.init(randomShape, SPAWN_X, SPAWN_Y)
+        this.#currentShape.init(randomShape, SPAWN_X, SPAWN_Y)
 
-        if (this.#grid.canPlace(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+        if (this.#grid.collide(this.#currentShape.matrix, this.#currentShape.x, this.#currentShape.y)) {
             this.isGameOver = true
         }
     }

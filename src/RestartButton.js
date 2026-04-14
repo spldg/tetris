@@ -9,10 +9,11 @@ export class RestartButton extends PIXI.Container {
         super()
 
         this.visible = false
-        this.addChild(this.#graphics)
+        this.#draw()
+        this.addChild(this.#graphics, this.#text)
     }
 
-    draw() {
+    #draw() {
         this.#graphics
         .beginFill(0x000000)
         .lineStyle({ width: 3, color: 0xFFFFFF , native: true})
