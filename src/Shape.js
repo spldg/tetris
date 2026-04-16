@@ -18,8 +18,8 @@ export class Shape {
 
     rotate() {
         const n = this.matrix.length
-
-        let result = Array.from({length: n }, () => new Array(n).fill(0))
+        
+        const result = Array.from({length: n }, () => new Array(n).fill(0))
 
         for (let i = 0; i < n; i++) {
             for (let j = 0; j < n; j++) {

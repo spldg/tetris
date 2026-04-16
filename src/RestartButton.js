@@ -4,6 +4,7 @@ import { BUTTON_SIZE_H, BUTTON_SIZE_W } from './constants.js'
 export class RestartButton extends PIXI.Container {
     #graphics = new PIXI.Graphics()
     #text
+    #time = 0
 
     constructor() {
         super()
@@ -11,6 +12,15 @@ export class RestartButton extends PIXI.Container {
         this.visible = false
         this.#draw()
         this.addChild(this.#graphics, this.#text)
+    }
+
+    update(delta) {
+        if (!this.visible) return
+
+        this.#time += delta
+
+        const pulse = 1 + Math.sin(this.#time * 0.2) * 0.02
+        this.scale.set(pulse)
     }
 
     #draw() {

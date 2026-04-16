@@ -3,8 +3,9 @@ import { CELL_SIZE, GRID_HEIGHT, GRID_WIDTH } from './constants.js'
 
 export class Grid extends PIXI.Container {
     #graphics = new PIXI.Graphics()
-    #grid = this.#createEmptyGrid()
-    
+    #grid = Array.from({ length: GRID_HEIGHT }, () =>
+            Array(GRID_WIDTH).fill(0))
+
     constructor() {
         super()
 
@@ -12,12 +13,7 @@ export class Grid extends PIXI.Container {
         this.#draw()
     }
 
-    #createEmptyGrid() {
-        return Array.from({ length: GRID_HEIGHT }, () =>
-            Array(GRID_WIDTH).fill(0))
-    }
-
-    saveShapeToGrid(shape,x,y) {
+    saveShapeToGrid(shape, x, y) {
         for (let i = 0; i < shape.length; i++) {
             for (let j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] === 1) {
@@ -63,7 +59,7 @@ export class Grid extends PIXI.Container {
     #clearLines() {
         let cleared = 0
 
-        for (let i = this.#grid.length - 1;i >= 0; i--) {
+        for (let i = this.#grid.length - 1; i >= 0; i--) {
             if (this.#grid[i].every((e) => e === 1)) {
                 this.#grid.splice(i, 1)
                 this.#grid.unshift(Array(GRID_WIDTH).fill(0))
@@ -75,21 +71,23 @@ export class Grid extends PIXI.Container {
         return cleared
     }
 
-    collide(shape,x,y) {
+    collide(shape, x, y) {
         for (let i = 0; i < shape.length; i++) {
             for (let j = 0; j < shape[i].length; j++) {
                 if (shape[i][j] === 1) {
                     const gridX = x + j
                     const gridY = y + i
 
-                    if (gridX < 0 ||
-                        gridX >= GRID_WIDTH ||
-                        gridY >= GRID_HEIGHT 
+                    if (gridX < 0
+                        || gridX >= GRID_WIDTH
+                        || gridY >= GRID_HEIGHT
                     ) {
                         return true
                     }
 
-                    if (gridY >= 0 && this.#grid[gridY][gridX] !== 0) {
+                    if (gridY < 0) continue
+
+                    if (this.#grid[gridY][gridX] !== 0) {
                         return true
                     }
                 }
@@ -98,8 +96,12 @@ export class Grid extends PIXI.Container {
         return false
     }
 
-    clearGrid () {
-       this.#grid = this.#createEmptyGrid()
-       this.#draw()
+    clearGrid() {
+        for (let i = 0; i < this.#grid.length; i++) {
+            for (let j = 0; j < this.#grid[i].length; j++) {
+                this.#grid[i][j] = 0  
+            }
+        }
+        this.#draw()
     }
 }

@@ -1,5 +1,6 @@
 {
   "name": "tetris",
+  "author": "spludge",
   "version": "8.1.8",
   "private": true,
   "type": "module",
@@ -7,7 +8,6 @@
     "start": "webpack serve --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
-  "author": "spludge",
   "dependencies": {
     "pixi.js": "^6.5.10"
   },

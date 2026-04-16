@@ -15,18 +15,16 @@ export class GameScene extends PIXI.Container {
         this.#scoreText.x = -150
         this.#scoreText.y = -300
 
-        this.#initKeys()
-        this.#onClick()
+        this.#gameField.on('gameover', this.#onGameOver)
+        this.#gameField.on('scorechange', this.#onScoreChange)
+        this.#restartButton.interactive = true
+        this.#restartButton.on('pointertap', this.#onRestart)
+
         this.addChild(this.#gameField, this.#restartButton, this.#scoreText)
     }
     update(delta) {
         this.#gameField.update(delta)
-
-        this.#scoreText.setScore(this.#gameField.score)
-
-        if (this.#gameField.isGameOver) {
-            this.#restartButton.show()
-        }
+        this.#restartButton.update(delta)
     }
 
     resize(width, height) {
@@ -41,43 +39,16 @@ export class GameScene extends PIXI.Container {
         this.y = height / 2
     }
 
-    #initKeys() {
-        window.addEventListener('keydown', this.#onKey)
+    #onGameOver = () => {
+        this.#restartButton.show()
     }
 
-    #onClick() {
-        this.#restartButton.interactive = true
-
-        this.#restartButton.on('pointertap', () => {
-            this.#gameField.clear()
-            this.#restartButton.hide()
-            console.log('somethign')
-        })
+    #onRestart = () => {
+        this.#gameField.clear()
+        this.#restartButton.hide()
     }
 
-    #onKey = (e) => {
-        switch (e.key) {
-            case 'ArrowLeft':
-                this.#moveLeft()
-                break
-            case 'ArrowRight':
-                this.#moveRight()
-                break
-            case 'ArrowUp':
-                this.#rotate()
-                break
-        }
-    }
-
-    #moveLeft() {
-        this.#gameField.moveLeft()
-    }
-
-    #moveRight() {
-        this.#gameField.moveRight()
-    }
-
-    #rotate() {
-        this.#gameField.rotate()
+    #onScoreChange = (score) => {
+        this.#scoreText.setScore(score)
     }
 }
