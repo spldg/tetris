@@ -1,22 +1,22 @@
 export class Shape {
-    matrix = []
+    matrix: number[][] = []
 
-    x = 0
-    y = 0
+    x: number = 0
+    y: number = 0
 
-    init(matrix, x, y) {
+    init(matrix: number[][], x: number, y: number) {
         this.matrix = matrix.map((row) => [...row])
 
         this.x = x
         this.y = y
     }
 
-    move(x, y) {
+    move(x: number, y: number): void {
         this.x += x
         this.y += y
     }
 
-    rotate() {
+    rotate(): void {
         const n = this.matrix.length
         
         const result = Array.from({length: n }, () => new Array(n).fill(0))

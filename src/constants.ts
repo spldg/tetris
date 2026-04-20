@@ -11,8 +11,7 @@ export const FALL_INTERVAL = 20
 export const BUTTON_SIZE_W = 145
 export const BUTTON_SIZE_H = 45
 
-
-export const SHAPES = [
+export const SHAPES: number[][][] = [
     [
         [1, 1],
         [1, 1],

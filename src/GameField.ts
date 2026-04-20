@@ -1,0 +1,168 @@
+import * as PIXI from 'pixi.js'
+import { CELL_SIZE, FALL_INTERVAL, GRID_HEIGHT, GRID_WIDTH, SHAPES, SPAWN_X, SPAWN_Y } from './constants'
+import { Grid } from './Grid'
+import { Shape } from './Shape'
+
+export class GameField extends PIXI.Container {
+    private fallTimer: number = 0
+    private fallInterval: number = FALL_INTERVAL
+
+    private grid: Grid = new Grid()
+
+    private shapeGraphics: PIXI.Graphics = new PIXI.Graphics()
+
+    private score: number = 0
+    private currentShape: Shape | null = null
+    private isGameOver: boolean = false
+
+    constructor() {
+        super()
+
+        this.pivot.set(GRID_WIDTH * CELL_SIZE / 2, GRID_HEIGHT * CELL_SIZE / 2)
+
+        window.addEventListener('keydown', this.onKey)
+
+        this.addChild(this.grid, this.shapeGraphics)
+    }
+
+    update(delta: number): void {
+        if (this.isGameOver) return
+
+        this.fallTimer += delta
+
+        if (this.currentShape) this.drawCurrentShape()
+
+        if (this.fallTimer < this.fallInterval) {
+            return
+        }
+
+        this.fallTimer -= this.fallInterval
+
+        this.fallUpdate()
+    }
+
+    private fallUpdate(): void {
+        if (!this.currentShape) {
+            this.spawnShape()
+            return
+        }
+        if (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
+            this.currentShape.move(0, 1)
+        } else {
+            const cleared = this.grid.saveShapeToGrid(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)
+            this.addScore(cleared)
+            this.spawnShape()
+        }
+    }
+
+    clear(): void {
+        this.grid.clearGrid()
+        this.currentShape = null
+        this.isGameOver = false
+        this.score = 0
+        this.shapeGraphics.clear()
+        this.emit('scorechange', this.score)
+    }
+    private onKey = (e: KeyboardEvent): void => {
+        switch (e.key) {
+            case 'ArrowLeft':
+                this.moveLeft()
+                break
+            case 'ArrowRight':
+                this.moveRight()
+                break
+            case 'ArrowUp':
+                this.rotate()
+                break
+            case 'ArrowDown':
+                this.moveDown()
+                break
+        }
+    }
+
+
+    private rotate(): void {
+        if (!this.currentShape) return
+
+        const prev = this.currentShape.matrix.map(row => [...row])
+
+        this.currentShape.rotate()
+
+
+        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.matrix = prev
+        }
+    }
+
+    private moveLeft(): void {
+        if (!this.currentShape) return
+
+        this.currentShape.move(-1, 0)
+        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.move(1, 0)
+        }
+
+    }
+
+    private moveRight(): void {
+        if (!this.currentShape) return
+
+
+        this.currentShape.move(1, 0)
+        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.move(-1, 0)
+        }
+    }
+    private moveDown(): void {
+        if (!this.currentShape) return
+        if (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
+            this.currentShape.move(0, 1)
+        }
+    }
+
+    private drawCurrentShape(): void {
+        if (!this.currentShape) return
+        this.shapeGraphics.clear()
+        const shape = this.currentShape.getCells()
+
+        for (const cell of shape) {
+            const x = cell.x * CELL_SIZE
+            const y = cell.y * CELL_SIZE
+
+            this.shapeGraphics
+                .beginFill(0x000000)
+                .lineStyle({ width: 1, color: 0xFFFFFF, native: true })
+                .drawRect(x, y, CELL_SIZE, CELL_SIZE)
+                .endFill()
+        }
+    }
+    private addScore(lines: number): number {
+        const scoreTab: Record<number, number> = {
+            1: 100,
+            2: 300,
+            3: 500,
+            4: 800,
+        }
+
+        const base = scoreTab[lines] || 0
+
+        const points = base
+
+        this.score += points
+        this.emit('scorechange', this.score)
+
+        return points
+    }
+
+    private spawnShape(): void {
+        const randomShape = SHAPES[Math.floor(Math.random() * SHAPES.length)]
+        this.currentShape = new Shape()
+
+        this.currentShape.init(randomShape, SPAWN_X, SPAWN_Y)
+
+        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.isGameOver = true
+            this.emit('gameover')
+        }
+    }
+}
