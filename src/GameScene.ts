@@ -1,11 +1,14 @@
-import PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js'
 import { GameField } from './GameField'
 import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from './constants'
 import { RestartButton } from './RestartButton'
 import { Score } from './Score'
+import { StartButton } from './StartButton'
+import { music } from './sound'
 
 export class GameScene extends PIXI.Container {
     private gameField = new GameField()
+    private startButton = new StartButton()
     private restartButton = new RestartButton()
     private scoreText = new Score()
 
@@ -16,13 +19,17 @@ export class GameScene extends PIXI.Container {
 
         this.gameField.on('gameover', this.onGameOver)
         this.gameField.on('scorechange', this.onScoreChange)
-        this.restartButton.interactive = true
+        this.startButton.once('pointertap', this.onStart)
         this.restartButton.on('pointertap', this.onRestart)
+        this.gameField.visible = false
+        this.scoreText.visible = false
 
-        this.addChild(this.gameField, this.restartButton, this.scoreText)
+        this.addChild(this.gameField, this.startButton, this.restartButton, this.scoreText)
     }
     public update(delta: number): void {
-        this.gameField.update(delta)
+        if (this.gameField.visible) {
+            this.gameField.update(delta)
+        }
         this.restartButton.update(delta)
     }
 
@@ -45,6 +52,15 @@ export class GameScene extends PIXI.Container {
     private onRestart = (): void => {
         this.gameField.clear()
         this.restartButton.hide()
+    }
+
+    private onStart = (): void => {
+        music.play()
+
+        this.startButton.visible = false
+        this.scoreText.visible = true
+        this.gameField.visible = true
+        this.gameField.clear()
     }
 
     private onScoreChange = (score: number): void => {

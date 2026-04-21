@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js'
 import { CELL_SIZE, FALL_INTERVAL, GRID_HEIGHT, GRID_WIDTH, SHAPES, SPAWN_X, SPAWN_Y } from './constants'
 import { Grid } from './Grid'
 import { Shape } from './Shape'
@@ -45,6 +45,8 @@ export class GameField extends PIXI.Container {
         this.currentShape = null
         this.isGameOver = false
         this.score = 0
+        this.fallTimer = 0
+        this.fallInterval = FALL_INTERVAL
         this.shapeGraphics.clear()
         this.emit('scorechange', this.score)
     }

@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js'
 import { GameScene } from './GameScene'
 
 const app = new PIXI.Application({
@@ -11,7 +11,6 @@ if (!container) {
     throw new Error('container not found')
 }
 container.appendChild(app.view)
-
 const gameScene = new GameScene()
 app.stage.addChild(gameScene)
 
