@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import PIXI from 'pixi.js'
 import { GameField } from './GameField'
 import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from './constants'
 import { RestartButton } from './RestartButton'

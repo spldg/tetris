@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import PIXI from 'pixi.js'
 import { CELL_SIZE, FALL_INTERVAL, GRID_HEIGHT, GRID_WIDTH, SHAPES, SPAWN_X, SPAWN_Y } from './constants'
 import { Grid } from './Grid'
 import { Shape } from './Shape'

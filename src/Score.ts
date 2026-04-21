@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import PIXI from 'pixi.js'
 
 export class Score extends PIXI.Container {
     private style: PIXI.TextStyle = new PIXI.TextStyle({

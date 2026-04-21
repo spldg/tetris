@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import PIXI from 'pixi.js'
 import { BUTTON_SIZE_H, BUTTON_SIZE_W } from './constants'
 
 export class RestartButton extends PIXI.Container {

@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import PIXI from 'pixi.js'
 import { CELL_SIZE, GRID_HEIGHT, GRID_WIDTH } from './constants'
 
 type Matrix = number[][]

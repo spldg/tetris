@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import PIXI from 'pixi.js'
 import { GameScene } from './GameScene'
 
 const app = new PIXI.Application({
