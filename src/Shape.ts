@@ -1,25 +1,27 @@
+import { IPointData } from 'pixi.js'
+
 export class Shape {
-    matrix: number[][] = []
+    public matrix: number[][] = []
 
-    x: number = 0
-    y: number = 0
+    public x: number = 0
+    public y: number = 0
 
-    init(matrix: number[][], x: number, y: number) {
+    public init(matrix: number[][], x: number, y: number) {
         this.matrix = matrix.map((row) => [...row])
 
         this.x = x
         this.y = y
     }
 
-    move(x: number, y: number): void {
+    public move(x: number, y: number): void {
         this.x += x
         this.y += y
     }
 
-    rotate(): void {
+    public rotate(): void {
         const n = this.matrix.length
-        
-        const result = Array.from({length: n }, () => new Array(n).fill(0))
+
+        const result = Array.from({ length: n }, () => new Array(n).fill(0))
 
         for (let i = 0; i < n; i++) {
             for (let j = 0; j < n; j++) {
@@ -29,8 +31,8 @@ export class Shape {
         this.matrix = result
     }
 
-    getCells() {
-        const cells = []
+    public getCells() {
+        const cells: IPointData[] = []
 
         for (let i = 0; i < this.matrix.length; i++) {
             for (let j = 0; j < this.matrix[i].length; j++) {

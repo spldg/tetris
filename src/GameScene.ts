@@ -5,13 +5,12 @@ import { RestartButton } from './RestartButton'
 import { Score } from './Score'
 
 export class GameScene extends PIXI.Container {
-    private gameField: GameField = new GameField()
-    private restartButton: RestartButton = new RestartButton()
-    private scoreText: Score = new Score()
+    private gameField = new GameField()
+    private restartButton = new RestartButton()
+    private scoreText = new Score()
 
     constructor() {
         super()
-
         this.scoreText.x = -150
         this.scoreText.y = -300
 
@@ -22,12 +21,12 @@ export class GameScene extends PIXI.Container {
 
         this.addChild(this.gameField, this.restartButton, this.scoreText)
     }
-    update(delta: number): void {
+    public update(delta: number): void {
         this.gameField.update(delta)
         this.restartButton.update(delta)
     }
 
-    resize(width: number, height: number): void {
+    public resize(width: number, height: number): void {
         const fieldWidth = CELL_SIZE * GRID_WIDTH + 50
         const fieldHeight = CELL_SIZE * GRID_HEIGHT + 100
 

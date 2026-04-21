@@ -6,7 +6,7 @@ const app = new PIXI.Application({
     backgroundColor: 0xd3d3d3,
     antialias: true
 })
-const container = document.getElementById("pixi-container")
+const container = document.getElementById('pixi-container')
 if (!container) {
     throw new Error('container not found')
 }

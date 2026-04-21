@@ -4,20 +4,19 @@ import { Grid } from './Grid'
 import { Shape } from './Shape'
 
 export class GameField extends PIXI.Container {
-    private fallTimer: number = 0
-    private fallInterval: number = FALL_INTERVAL
+    private fallTimer = 0
+    private fallInterval = FALL_INTERVAL
 
-    private grid: Grid = new Grid()
+    private grid = new Grid()
 
-    private shapeGraphics: PIXI.Graphics = new PIXI.Graphics()
+    private shapeGraphics = new PIXI.Graphics()
 
-    private score: number = 0
+    private score = 0
     private currentShape: Shape | null = null
-    private isGameOver: boolean = false
+    private isGameOver = false
 
     constructor() {
         super()
-
         this.pivot.set(GRID_WIDTH * CELL_SIZE / 2, GRID_HEIGHT * CELL_SIZE / 2)
 
         window.addEventListener('keydown', this.onKey)
@@ -25,7 +24,7 @@ export class GameField extends PIXI.Container {
         this.addChild(this.grid, this.shapeGraphics)
     }
 
-    update(delta: number): void {
+    public update(delta: number): void {
         if (this.isGameOver) return
 
         this.fallTimer += delta
@@ -39,6 +38,15 @@ export class GameField extends PIXI.Container {
         this.fallTimer -= this.fallInterval
 
         this.fallUpdate()
+    }
+
+    public clear(): void {
+        this.grid.clearGrid()
+        this.currentShape = null
+        this.isGameOver = false
+        this.score = 0
+        this.shapeGraphics.clear()
+        this.emit('scorechange', this.score)
     }
 
     private fallUpdate(): void {
@@ -55,14 +63,6 @@ export class GameField extends PIXI.Container {
         }
     }
 
-    clear(): void {
-        this.grid.clearGrid()
-        this.currentShape = null
-        this.isGameOver = false
-        this.score = 0
-        this.shapeGraphics.clear()
-        this.emit('scorechange', this.score)
-    }
     private onKey = (e: KeyboardEvent): void => {
         switch (e.key) {
             case 'ArrowLeft':

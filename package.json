@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "lint:ts": "npx tsc --noEmit",
+    "lint:es": "npx eslint -c ./eslint.config.js .",
+    "lint": "npm run lint:ts && npm run lint:es"
   },
   "dependencies": {
     "pixi.js": "^6.5.10"
@@ -18,6 +21,9 @@
     "webpack": "^5.105.4",
     "webpack-cli": "^7.0.2",
     "webpack-dev-server": "^5.2.3",
-    "webpack-merge": "^6.0.1"
+    "webpack-merge": "^6.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "eslint": "^9.39.2"
   }
 }
