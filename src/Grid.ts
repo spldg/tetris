@@ -27,9 +27,7 @@ export class Grid extends PIXI.Container {
                     ) {
                         return true
                     }
-
                     if (gridY < 0) continue
-
                     if (this.grid[gridY][gridX] !== 0) {
                         return true
                     }
@@ -98,7 +96,6 @@ export class Grid extends PIXI.Container {
 
     private clearLines() {
         let cleared = 0
-
         for (let i = this.grid.length - 1; i >= 0; i--) {
             if (this.grid[i].every((e) => e === 1)) {
                 this.grid.splice(i, 1)
@@ -107,7 +104,6 @@ export class Grid extends PIXI.Container {
                 cleared++
             }
         }
-
         return cleared
     }
 }

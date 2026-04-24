@@ -1,30 +1,39 @@
 import * as PIXI from 'pixi.js'
-import { GameField } from './GameField'
 import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from './constants'
+import { GameField } from './GameField'
+import { NextContainer } from './NextContainer'
+import { StartButton } from './StartButton'
 import { RestartButton } from './RestartButton'
 import { Score } from './Score'
-import { StartButton } from './StartButton'
-import { music } from './sound'
+// import { music } from './sound'
 
 export class GameScene extends PIXI.Container {
     private gameField = new GameField()
     private startButton = new StartButton()
     private restartButton = new RestartButton()
     private scoreText = new Score()
+    private nextContainer = new NextContainer()
 
     constructor() {
         super()
         this.scoreText.x = -150
         this.scoreText.y = -300
 
+        this.nextContainer.x = 200
+        this.nextContainer.y = -200
+
         this.gameField.on('gameover', this.onGameOver)
         this.gameField.on('scorechange', this.onScoreChange)
+        this.gameField.on('levelchange', this.onLevelChange)
         this.startButton.once('pointertap', this.onStart)
         this.restartButton.on('pointertap', this.onRestart)
+        this.gameField.on('nextchange', (shape: number[][]) => {
+            this.nextContainer.draw(shape)
+        })
         this.gameField.visible = false
         this.scoreText.visible = false
 
-        this.addChild(this.gameField, this.startButton, this.restartButton, this.scoreText)
+        this.addChild(this.gameField, this.startButton, this.restartButton, this.scoreText, this.nextContainer)
     }
     public update(delta: number): void {
         if (this.gameField.visible) {
@@ -55,15 +64,20 @@ export class GameScene extends PIXI.Container {
     }
 
     private onStart = (): void => {
-        music.play()
+        // music.play()
 
         this.startButton.visible = false
         this.scoreText.visible = true
         this.gameField.visible = true
+        this.nextContainer.visible = true
         this.gameField.clear()
     }
 
     private onScoreChange = (score: number): void => {
         this.scoreText.setScore(score)
+    }
+
+    private onLevelChange = (level: number): void => {
+        this.scoreText.setLevel(level)
     }
 }

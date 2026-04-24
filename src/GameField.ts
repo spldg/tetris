@@ -12,7 +12,10 @@ export class GameField extends PIXI.Container {
     private shapeGraphics = new PIXI.Graphics()
 
     private score = 0
+    private level = 1
+    private totalLines = 0
     private currentShape: Shape | null = null
+    private nextShape: number[][] | null = null
     private isGameOver = false
 
     constructor() {
@@ -61,35 +64,46 @@ export class GameField extends PIXI.Container {
         } else {
             const cleared = this.grid.saveShapeToGrid(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)
             this.addScore(cleared)
+            this.totalLines += cleared
+            this.levelCheck()
             this.spawnShape()
         }
     }
 
     private onKey = (e: KeyboardEvent): void => {
         switch (e.key) {
-            case 'ArrowLeft':
+            case 'a':
                 this.moveLeft()
                 break
-            case 'ArrowRight':
+            case 'd':
                 this.moveRight()
                 break
-            case 'ArrowUp':
+            case 'w':
                 this.rotate()
                 break
-            case 'ArrowDown':
+            case 's':
                 this.moveDown()
                 break
+            case ' ':
+                this.hardDrop()
         }
     }
 
+    private levelCheck (): void {
+        const nextLevel = Math.floor(this.totalLines / 10) + 1
 
+        if (nextLevel > this.level) {
+            this.level = nextLevel
+            this.fallInterval = Math.max(5, FALL_INTERVAL - (this.level - 1) * 2)
+            this.emit('levelchange', this.level)
+        }
+    }
     private rotate(): void {
         if (!this.currentShape) return
 
         const prev = this.currentShape.matrix.map(row => [...row])
 
         this.currentShape.rotate()
-
 
         if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
             this.currentShape.matrix = prev
@@ -109,7 +123,6 @@ export class GameField extends PIXI.Container {
     private moveRight(): void {
         if (!this.currentShape) return
 
-
         this.currentShape.move(1, 0)
         if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
             this.currentShape.move(-1, 0)
@@ -119,6 +132,13 @@ export class GameField extends PIXI.Container {
         if (!this.currentShape) return
         if (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
             this.currentShape.move(0, 1)
+        }
+    }
+
+    private hardDrop(): void {
+        if (!this.currentShape) return
+        while (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
+            this.currentShape.y++
         }
     }
 
@@ -138,6 +158,7 @@ export class GameField extends PIXI.Container {
                 .endFill()
         }
     }
+
     private addScore(lines: number): number {
         const scoreTab: Record<number, number> = {
             1: 100,
@@ -148,7 +169,7 @@ export class GameField extends PIXI.Container {
 
         const base = scoreTab[lines] || 0
 
-        const points = base
+        const points = base * (this.level + 1)
 
         this.score += points
         this.emit('scorechange', this.score)
@@ -156,11 +177,19 @@ export class GameField extends PIXI.Container {
         return points
     }
 
-    private spawnShape(): void {
-        const randomShape = SHAPES[Math.floor(Math.random() * SHAPES.length)]
-        this.currentShape = new Shape()
+    private getRandomShape(): number[][] {
+        return SHAPES[Math.floor(Math.random() * SHAPES.length)]
+    }
 
-        this.currentShape.init(randomShape, SPAWN_X, SPAWN_Y)
+    private spawnShape(): void {
+        if (!this.nextShape) {
+            this.nextShape = this.getRandomShape()
+        }
+        this.currentShape = new Shape()
+        this.currentShape.init(this.nextShape, SPAWN_X, SPAWN_Y)
+
+        this.nextShape = this.getRandomShape()
+        this.emit('nextchange', this.nextShape)
 
         if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
             this.isGameOver = true

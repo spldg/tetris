@@ -1,6 +1,5 @@
 export const GRID_WIDTH = 10
 export const GRID_HEIGHT = 20
-
 export const CELL_SIZE = 30
 
 export const SPAWN_X = 3
@@ -10,6 +9,10 @@ export const FALL_INTERVAL = 20
 
 export const BUTTON_SIZE_W = 145
 export const BUTTON_SIZE_H = 45
+
+export const START_CONTAINER_W = 500
+export const START_CONTAINER_H = 700
+
 
 export const SHAPES: number[][][] = [
     [
