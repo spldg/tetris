@@ -12,6 +12,7 @@ export class GameField extends PIXI.Container {
     private shapeGraphics = new PIXI.Graphics()
 
     private score = 0
+    private bestScore = this.getBestScore()
     private level = 1
     private totalLines = 0
     private currentShape: Shape | null = null
@@ -48,9 +49,12 @@ export class GameField extends PIXI.Container {
         this.currentShape = null
         this.isGameOver = false
         this.score = 0
+        this.level = 1
         this.fallTimer = 0
         this.fallInterval = FALL_INTERVAL
         this.shapeGraphics.clear()
+        this.emit('bestscorechange', this.bestScore)
+        this.emit('levelchange', this.level)
         this.emit('scorechange', this.score)
     }
 
@@ -89,7 +93,7 @@ export class GameField extends PIXI.Container {
         }
     }
 
-    private levelCheck (): void {
+    private levelCheck(): void {
         const nextLevel = Math.floor(this.totalLines / 10) + 1
 
         if (nextLevel > this.level) {
@@ -192,8 +196,26 @@ export class GameField extends PIXI.Container {
         this.emit('nextchange', this.nextShape)
 
         if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.bestScore = this.updateBestScore()
+            this.emit('bestscorechange', this.bestScore)
             this.isGameOver = true
             this.emit('gameover')
         }
+    }
+    private setBestScore(score: number): void {
+        localStorage.setItem('bestScore', String(score))
+    }
+
+    private getBestScore(): number {
+        return Number(localStorage.getItem('bestScore')) || 0
+    }
+
+    private updateBestScore(): number {
+        const best = this.getBestScore()
+        if (this.score > best) {
+            this.setBestScore(this.score)
+            return this.score
+        }
+        return best
     }
 }

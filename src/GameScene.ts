@@ -23,6 +23,7 @@ export class GameScene extends PIXI.Container {
         this.nextContainer.y = -200
 
         this.gameField.on('gameover', this.onGameOver)
+        this.gameField.on('bestscorechange', this.onBestScoreChange)
         this.gameField.on('scorechange', this.onScoreChange)
         this.gameField.on('levelchange', this.onLevelChange)
         this.startButton.once('pointertap', this.onStart)
@@ -33,7 +34,13 @@ export class GameScene extends PIXI.Container {
         this.gameField.visible = false
         this.scoreText.visible = false
 
-        this.addChild(this.gameField, this.startButton, this.restartButton, this.scoreText, this.nextContainer)
+        this.addChild(
+            this.gameField,
+            this.startButton,
+            this.restartButton,
+            this.scoreText,
+            this.nextContainer
+        )
     }
     public update(delta: number): void {
         if (this.gameField.visible) {
@@ -75,6 +82,10 @@ export class GameScene extends PIXI.Container {
 
     private onScoreChange = (score: number): void => {
         this.scoreText.setScore(score)
+    }
+
+    private onBestScoreChange = (bestScore: number) : void => {
+        this.scoreText.setBestScore(bestScore)
     }
 
     private onLevelChange = (level: number): void => {
