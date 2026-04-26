@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { BUTTON_SIZE_H, BUTTON_SIZE_W } from './constants'
+import gsap from 'gsap'
 
 export class RestartButton extends PIXI.Container {
     private graphics = new PIXI.Graphics()
@@ -8,7 +9,7 @@ export class RestartButton extends PIXI.Container {
         fontSize: 20,
         fill: 0xffffff
     })
-    private time = 0
+    // private time = 0
 
     constructor() {
         super()
@@ -24,20 +25,24 @@ export class RestartButton extends PIXI.Container {
         this.addChild(this.graphics, this.text)
     }
 
-    public update(delta: number): void {
-        if (!this.visible) return
-
-        this.time += delta
-
-        const pulse = 1 + Math.sin(this.time * 0.2) * 0.02
-        this.scale.set(pulse)
-    }
-
     public show(): void {
         this.visible = true
+        gsap.killTweensOf(this.scale)
+
+        gsap.to(this.scale, {
+            duration: 0.6,
+            x: 1.05,
+            y: 1.05,
+            yoyo: true,
+            repeat: -1,
+            ease: 'power4.inOut'
+        })
     }
 
     public hide(): void {
         this.visible = false
+
+        gsap.killTweensOf(this.scale)
+        this.scale.set(1)
     }
 }

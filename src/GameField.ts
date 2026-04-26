@@ -8,6 +8,7 @@ export class GameField extends PIXI.Container {
     private fallInterval = FALL_INTERVAL
 
     private grid = new Grid()
+    private isProcessing = false
 
     private shapeGraphics = new PIXI.Graphics()
 
@@ -58,7 +59,9 @@ export class GameField extends PIXI.Container {
         this.emit('scorechange', this.score)
     }
 
-    private fallUpdate(): void {
+    private async fallUpdate(): Promise<void> {
+        if (this.isProcessing) return
+
         if (!this.currentShape) {
             this.spawnShape()
             return
@@ -66,11 +69,17 @@ export class GameField extends PIXI.Container {
         if (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
             this.currentShape.move(0, 1)
         } else {
-            const cleared = this.grid.saveShapeToGrid(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)
+            this.isProcessing = true
+            const lockedShape = this.currentShape
+            this.shapeGraphics.clear()
+            this.currentShape = null
+            const cleared = await this.grid.saveShapeToGrid(lockedShape.matrix, lockedShape.x, lockedShape.y)
             this.addScore(cleared)
             this.totalLines += cleared
             this.levelCheck()
             this.spawnShape()
+
+            this.isProcessing = false
         }
     }
 

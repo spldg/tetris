@@ -46,7 +46,6 @@ export class GameScene extends PIXI.Container {
         if (this.gameField.visible) {
             this.gameField.update(delta)
         }
-        this.restartButton.update(delta)
     }
 
     public resize(width: number, height: number): void {
@@ -72,7 +71,6 @@ export class GameScene extends PIXI.Container {
 
     private onStart = (): void => {
         // music.play()
-
         this.startButton.visible = false
         this.scoreText.visible = true
         this.gameField.visible = true
