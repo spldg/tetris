@@ -3,7 +3,7 @@ import { CELL_SIZE } from './constants'
 
 export class NextContainer extends PIXI.Container {
     private text = new PIXI.Text('Next shape', {
-        fontFamily: 'Arial',
+        fontFamily: 'Silkscreen',
         fontSize: 20,
         fill: 0x000000
     })

@@ -5,7 +5,7 @@ import gsap from 'gsap'
 export class RestartButton extends PIXI.Container {
     private graphics = new PIXI.Graphics()
     private text = new PIXI.Text('Restart', {
-        fontFamily: 'Arial',
+        fontFamily: 'Silkscreen',
         fontSize: 20,
         fill: 0xffffff
     })

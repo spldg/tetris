@@ -11,18 +11,19 @@ if (!container) {
     throw new Error('container not found')
 }
 container.appendChild(app.view)
-const gameScene = new GameScene()
-app.stage.addChild(gameScene)
-
-function resize(): void {
-    const width = window.innerWidth
-    const height = window.innerHeight
-
-    gameScene.resize(width, height)
+async function bootstrap(): Promise<void> {
+    await document.fonts.load('16px "Press Start 2P"')
+    const gameScene = new GameScene()
+    app.stage.addChild(gameScene)
+    function resize(): void {
+        const width = window.innerWidth
+        const height = window.innerHeight
+        gameScene.resize(width, height)
+    }
+    resize()
+    window.addEventListener('resize', resize)
+    app.ticker.add((delta: number) => {
+        gameScene.update(delta)
+    })
 }
-resize()
-window.addEventListener('resize', resize)
-
-app.ticker.add((delta: number) => {
-    gameScene.update(delta)
-})
+bootstrap()

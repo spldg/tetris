@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js'
 import { CELL_SIZE, FALL_INTERVAL, GRID_HEIGHT, GRID_WIDTH, SHAPES, SPAWN_X, SPAWN_Y } from './constants'
 import { Grid } from './Grid'
 import { Shape } from './Shape'
+import { levelChangeFx } from './sound'
 
 export class GameField extends PIXI.Container {
     private fallTimer = 0
@@ -107,6 +108,7 @@ export class GameField extends PIXI.Container {
 
         if (nextLevel > this.level) {
             this.level = nextLevel
+            levelChangeFx.play()
             this.fallInterval = Math.max(5, FALL_INTERVAL - (this.level - 1) * 2)
             this.emit('levelchange', this.level)
         }

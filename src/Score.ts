@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 
 export class Score extends PIXI.Container {
     private style = new PIXI.TextStyle({
-        fontFamily: 'Arial',
+        fontFamily: 'Silkscreen',
         fontSize: 24,
         fill: 0x000000
     })
@@ -17,7 +17,7 @@ export class Score extends PIXI.Container {
         this.bestScoreText.anchor.set(0, 1)
         this.levelText.anchor.set(0, 1)
         this.levelText.position.set(215, 0)
-        this.bestScoreText.position.set(0, -30)
+        this.bestScoreText.position.set(0, -36)
 
         this.addChild(this.scoreText, this.levelText, this.bestScoreText)
     }

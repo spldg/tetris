@@ -1,17 +1,17 @@
 import * as PIXI from 'pixi.js'
 import { FX_ROW_Y, LABEL_X, MUSIC_ROW_Y, START_MENU_VOLUME_ACTIVE_COLOR, START_MENU_VOLUME_BAR_H, START_MENU_VOLUME_BAR_W, START_MENU_VOLUME_GAP, START_MENU_VOLUME_INACTIVE_COLOR, START_MENU_VOLUME_STEPS, START_MENU_VOLUME_X } from './constants'
-import { music } from './sound'
+import { clearLineFx, fx, levelChangeFx, music } from './sound'
 
 export class SoundControls extends PIXI.Container {
     private musicText = new PIXI.Text('Music', {
-        fontFamily: 'Arial',
+        fontFamily: 'Silkscreen',
         fontSize: 18,
         fill: 0x000000
     })
     private musicLevel = 0
     private musicBars: PIXI.Graphics[] = []
     private fxText = new PIXI.Text('FX', {
-        fontFamily: 'Arial',
+        fontFamily: 'Silkscreen',
         fontSize: 18,
         fill: 0x000000
     })
@@ -21,6 +21,7 @@ export class SoundControls extends PIXI.Container {
     constructor() {
         super()
         this.musicLevel = Number(localStorage.getItem('musicLevel')) || 0
+        this.onMusicChange(this.musicLevel)
         this.musicText.anchor.set(0, 0.5)
         this.musicText.position.set(LABEL_X, MUSIC_ROW_Y)
         this.drawBars(this.musicBars, this.musicLevel, MUSIC_ROW_Y, 'music')
@@ -84,12 +85,17 @@ export class SoundControls extends PIXI.Container {
 
     private onMusicChange(level: number): void {
         const volume = level / 5
+        fx.volume(volume)
+        fx.play()
         music.volume(volume)
         localStorage.setItem('musicLevel', String(level))
     }
 
     private onFxChange(level: number): void {
-        const volume = level / 5
+        const volume = (level / 5) * 0.6
+        levelChangeFx.volume(volume)
+        clearLineFx.volume(volume)
+        clearLineFx.play()
         localStorage.setItem('fxLevel', String(level))
     }
 }

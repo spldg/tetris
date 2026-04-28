@@ -4,21 +4,22 @@ import { SoundControls } from './SoundControls'
 export class StartMenu extends PIXI.Container {
     private graphics = new PIXI.Graphics()
     private headerText = new PIXI.Text('TETRIS', {
-        fontFamily: 'Arial',
-        fontSize: 48,
+        fontFamily: 'Press Start 2P',
+        fontSize: 38,
         fill: 0x000000
     })
     private bestScoreText = new PIXI.Text('text', {
-        fontFamily: 'Arial',
-        fontSize: 20,
+        fontFamily: 'Silkscreen',
+        fontSize: 18,
         fill: 0x000000
     })
     private startText = new PIXI.Text('Start', {
-        fontFamily: 'Arial',
+        fontFamily: 'Silkscreen',
         fontSize: 20,
-        fill: 0x000000
+        fill: 0x000000,
     })
     private startButton = new PIXI.Graphics()
+    private startButtonShadow = new PIXI.Graphics()
     private soundControls = new SoundControls()
 
     constructor() {
@@ -34,8 +35,13 @@ export class StartMenu extends PIXI.Container {
         })
 
         this.startButton
-            .beginFill(0xbdbdbd)
+            .beginFill(0xffffff)
+            .lineStyle({ width: 3, color: 0x000000, native: true })
             .drawRect(-BUTTON_SIZE_W / 2, -BUTTON_SIZE_H / 2, BUTTON_SIZE_W, BUTTON_SIZE_H)
+            .endFill()
+        this.startButtonShadow
+            .beginFill(0x000000)
+            .drawRect(-BUTTON_SIZE_W / 2 + 4, -BUTTON_SIZE_H / 2 + 15, BUTTON_SIZE_W, BUTTON_SIZE_H)
             .endFill()
 
         this.startText.anchor.set(0.5)
@@ -53,10 +59,11 @@ export class StartMenu extends PIXI.Container {
         this.addChild(
             this.graphics,
             this.headerText,
+            this.startButtonShadow,
             this.startButton,
             this.startText,
             this.bestScoreText,
-            this.soundControls
+            this.soundControls,
         )
     }
     public setBestScore(score: number): void {

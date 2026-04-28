@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js'
 import { CELL_SIZE, GRID_HEIGHT, GRID_WIDTH } from './constants'
-import { malanga } from './sound'
+import { clearLineFx } from './sound'
 import gsap from 'gsap'
 
 type Matrix = number[][]
@@ -72,10 +72,7 @@ export class Grid extends PIXI.Container {
         const cleared = await this.clearLines(lines)
         this.draw()
         if (cleared > 0) {
-            const arr = [0.8, 1, 1.3]
-            const index = Math.floor(Math.random() * arr.length)
-            malanga.rate(arr[index])
-            malanga.play()
+            clearLineFx.play()
         }
         return cleared
     }
