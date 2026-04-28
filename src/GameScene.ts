@@ -2,14 +2,14 @@ import * as PIXI from 'pixi.js'
 import { GRID_HEIGHT, GRID_WIDTH, CELL_SIZE } from './constants'
 import { GameField } from './GameField'
 import { NextContainer } from './NextContainer'
-import { StartButton } from './StartButton'
+import { StartMenu } from './StartMenu'
 import { RestartButton } from './RestartButton'
 import { Score } from './Score'
-// import { music } from './sound'
+import { music } from './sound'
 
 export class GameScene extends PIXI.Container {
     private gameField = new GameField()
-    private startButton = new StartButton()
+    private startMenu = new StartMenu()
     private restartButton = new RestartButton()
     private scoreText = new Score()
     private nextContainer = new NextContainer()
@@ -26,7 +26,7 @@ export class GameScene extends PIXI.Container {
         this.gameField.on('bestscorechange', this.onBestScoreChange)
         this.gameField.on('scorechange', this.onScoreChange)
         this.gameField.on('levelchange', this.onLevelChange)
-        this.startButton.once('pointertap', this.onStart)
+        this.startMenu.once('start', this.onStart)
         this.restartButton.on('pointertap', this.onRestart)
         this.gameField.on('nextchange', (shape: number[][]) => {
             this.nextContainer.draw(shape)
@@ -34,9 +34,11 @@ export class GameScene extends PIXI.Container {
         this.gameField.visible = false
         this.scoreText.visible = false
 
+        this.gameField.clear()
+
         this.addChild(
             this.gameField,
-            this.startButton,
+            this.startMenu,
             this.restartButton,
             this.scoreText,
             this.nextContainer
@@ -70,8 +72,8 @@ export class GameScene extends PIXI.Container {
     }
 
     private onStart = (): void => {
-        // music.play()
-        this.startButton.visible = false
+        music.play()
+        this.startMenu.visible = false
         this.scoreText.visible = true
         this.gameField.visible = true
         this.nextContainer.visible = true
@@ -84,6 +86,7 @@ export class GameScene extends PIXI.Container {
 
     private onBestScoreChange = (bestScore: number) : void => {
         this.scoreText.setBestScore(bestScore)
+        this.startMenu.setBestScore(bestScore)
     }
 
     private onLevelChange = (level: number): void => {
