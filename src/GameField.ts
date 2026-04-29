@@ -50,6 +50,7 @@ export class GameField extends PIXI.Container {
         this.grid.clearGrid()
         this.currentShape = null
         this.isGameOver = false
+        this.totalLines = 0
         this.score = 0
         this.level = 1
         this.fallTimer = 0
