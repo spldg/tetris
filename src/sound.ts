@@ -1,6 +1,5 @@
 import { Howl } from 'howler'
 import bgMusic from '../assets/sounds/backgroundMusic.mp3'
-import malangaSound from '../assets/sounds/malanga.mp3'
 import lvlChangeFx from '../assets/sounds/nextlevel.mp3'
 import clearLinefx from '../assets/sounds/clearLineFx.mp3'
 import FX from '../assets/sounds/fx.mp3'
@@ -9,10 +8,6 @@ export const music = new Howl({
     src: bgMusic,
     loop: true,
     volume: 0.125,
-})
-
-export const malanga = new Howl({
-    src: malangaSound,
 })
 
 export const levelChangeFx = new Howl ({
