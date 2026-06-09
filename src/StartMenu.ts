@@ -66,6 +66,7 @@ export class StartMenu extends PIXI.Container {
             this.soundControls,
         )
     }
+
     public setBestScore(score: number): void {
         this.bestScoreText.text = `Best score: ${score}`
     }

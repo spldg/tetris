@@ -3,8 +3,8 @@ import { IPointData } from 'pixi.js'
 export class Shape {
     public matrix: number[][] = []
 
-    public x: number = 0
-    public y: number = 0
+    public x = 0
+    public y = 0
 
     public init(matrix: number[][], x: number, y: number) {
         this.matrix = matrix.map((row) => [...row])

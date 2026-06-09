@@ -24,7 +24,14 @@ export class GameField extends PIXI.Container {
     constructor() {
         super()
         this.pivot.set(GRID_WIDTH * CELL_SIZE / 2, GRID_HEIGHT * CELL_SIZE / 2)
-
+        this.interactive = true
+        this.hitArea = new PIXI.Rectangle(
+            0,
+            0,
+            GRID_WIDTH * CELL_SIZE,
+            GRID_HEIGHT * CELL_SIZE
+        )
+        this.on('pointertap', this.onTap)
         window.addEventListener('keydown', this.onKey)
 
         this.addChild(this.grid, this.shapeGraphics)
@@ -87,20 +94,48 @@ export class GameField extends PIXI.Container {
 
     private onKey = (e: KeyboardEvent): void => {
         switch (e.key) {
-            case 'a':
+            case 'ArrowLeft':
+            case 'KeyA':
                 this.moveLeft()
                 break
-            case 'd':
+            case 'ArrowRight':
+            case 'KeyD':
                 this.moveRight()
                 break
-            case 'w':
+            case 'ArrowUp':
+            case 'KeyW':
                 this.rotate()
                 break
-            case 's':
+            case 'ArrowDown':
+            case 'KeyS':
                 this.moveDown()
                 break
             case ' ':
                 this.hardDrop()
+        }
+    }
+
+    private onTap = (e: PIXI.InteractionEvent): void => {
+        if (this.isGameOver || !this.currentShape) return
+
+        const point = e.data.getLocalPosition(this)
+        const width = GRID_WIDTH * CELL_SIZE
+        const height = GRID_HEIGHT * CELL_SIZE
+
+        if (point.y < height * 0.3) {
+            this.rotate()
+            return
+        }
+
+        if (point.y > height * 0.7) {
+            this.hardDrop()
+            return
+        }
+
+        if (point.x < width / 2) {
+            this.moveLeft()
+        } else {
+            this.moveRight()
         }
     }
 

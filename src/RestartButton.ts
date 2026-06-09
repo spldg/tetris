@@ -9,7 +9,6 @@ export class RestartButton extends PIXI.Container {
         fontSize: 20,
         fill: 0xffffff
     })
-    // private time = 0
 
     constructor() {
         super()
@@ -18,7 +17,7 @@ export class RestartButton extends PIXI.Container {
         this.graphics
             .beginFill(0x000000)
             .lineStyle({ width: 3, color: 0xFFFFFF, native: true })
-            .drawRoundedRect(-BUTTON_SIZE_W / 2, -BUTTON_SIZE_H / 2, BUTTON_SIZE_W, BUTTON_SIZE_H, 25)
+            .drawRect(-BUTTON_SIZE_W / 2, -BUTTON_SIZE_H / 2, BUTTON_SIZE_W, BUTTON_SIZE_H)
             .endFill()
 
         this.text.anchor.set(0.5)

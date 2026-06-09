@@ -66,6 +66,7 @@ export class SoundControls extends PIXI.Container {
             this.addChild(bar)
         }
     }
+
     private clearBars(bars: PIXI.Graphics[]): void {
         for (const bar of bars) {
             this.removeChild(bar)
