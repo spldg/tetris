@@ -6,6 +6,7 @@ import { StartMenu } from './StartMenu'
 import { RestartButton } from './RestartButton'
 import { Score } from './Score'
 import { music } from './sound'
+import { MobileControls } from './MobileControls'
 
 export class GameScene extends PIXI.Container {
     private gameField = new GameField()
@@ -13,6 +14,7 @@ export class GameScene extends PIXI.Container {
     private restartButton = new RestartButton()
     private scoreText = new Score()
     private nextContainer = new NextContainer()
+    private mobileControls = new MobileControls()
 
     constructor() {
         super()
@@ -31,6 +33,11 @@ export class GameScene extends PIXI.Container {
         this.gameField.on('nextchange', (shape: number[][]) => {
             this.nextContainer.draw(shape)
         })
+        this.mobileControls.on('left', () => this.gameField.moveLeft())
+        this.mobileControls.on('right', () => this.gameField.moveRight())
+        this.mobileControls.on('rotate', () => this.gameField.rotate())
+        this.mobileControls.on('down', () => this.gameField.moveDown())
+        this.mobileControls.on('drop', () => this.gameField.hardDrop())
         this.gameField.visible = false
         this.scoreText.visible = false
 
@@ -41,7 +48,8 @@ export class GameScene extends PIXI.Container {
             this.startMenu,
             this.restartButton,
             this.scoreText,
-            this.nextContainer
+            this.nextContainer,
+            this.mobileControls
         )
     }
     public update(delta: number): void {
@@ -52,49 +60,55 @@ export class GameScene extends PIXI.Container {
 
     public resize(width: number, height: number): void {
         const isMobile = width < 520
-        const mobileContentScale = 0.92
+        const mobileFieldOffsetY = -40
 
         if (isMobile) {
-            this.gameField.scale.set(mobileContentScale)
-            this.scoreText.scale.set(mobileContentScale)
-            this.startMenu.scale.set(mobileContentScale)
+            this.scoreText.scale.set(0.8)
 
-            this.scoreText.x = -150
-            this.scoreText.y = -280
-            this.nextContainer.text.text =
-        `Next 
-shape`
+            this.gameField.position.set(0, mobileFieldOffsetY)
+            this.startMenu.position.set(0, mobileFieldOffsetY)
+            this.restartButton.position.set(0, mobileFieldOffsetY)
 
-            this.nextContainer.x = 145
-            this.nextContainer.y = -280
+            this.scoreText.setMobileLayout(true)
+            this.scoreText.position.set(-150, -415)
+
+            this.nextContainer.setMobileLayout(true)
+            this.nextContainer.position.set(0, -415)
             this.nextContainer.scale.set(0.55)
+
+            this.mobileControls.visible = true
+            this.mobileControls.position.set(0, 350)
+            this.mobileControls.scale.set(0.85)
         } else {
-            this.gameField.scale.set(1)
-            this.scoreText.scale.set(1)
-            this.startMenu.scale.set(1)
 
-            this.scoreText.x = -150
-            this.scoreText.y = -300
+            this.gameField.position.set(0, 0)
+            this.startMenu.position.set(0, 0)
+            this.restartButton.position.set(0, 0)
 
-            this.nextContainer.x = 200
-            this.nextContainer.y = -200
+            this.scoreText.setMobileLayout(false)
+            this.scoreText.position.set(-150, -300)
+
+            this.nextContainer.setMobileLayout(false)
+            this.nextContainer.position.set(200, -200)
             this.nextContainer.scale.set(1)
+
+            this.mobileControls.visible = false
         }
 
         const fieldWidth = isMobile
-            ? CELL_SIZE * GRID_WIDTH * mobileContentScale + 110
+            ? CELL_SIZE * GRID_WIDTH + 20
             : CELL_SIZE * GRID_WIDTH + 220
 
         const fieldHeight = isMobile
-            ? CELL_SIZE * GRID_HEIGHT * mobileContentScale + 100
+            ? CELL_SIZE * GRID_HEIGHT + 125
             : CELL_SIZE * GRID_HEIGHT + 100
 
         const scale = Math.min(1, width / fieldWidth, height / fieldHeight)
 
         this.scale.set(scale)
 
-        this.x = width / 2 - (isMobile ? 14 : 0)
-        this.y = height / 2 + (isMobile ? 36 : 0)
+        this.x = width / 2
+        this.y = height / 2
     }
 
     private onGameOver = (): void => {

@@ -1,7 +1,6 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { extensions } from 'pixi.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)

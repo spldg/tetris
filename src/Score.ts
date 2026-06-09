@@ -13,13 +13,30 @@ export class Score extends PIXI.Container {
 
     constructor() {
         super()
+        this.setMobileLayout(false)
+
+        this.addChild(this.scoreText, this.levelText, this.bestScoreText)
+    }
+
+    public setMobileLayout(isMobile: boolean): void {
+        this.bestScoreText.visible = !isMobile
+
+        if (isMobile) {
+            this.scoreText.anchor.set(0, 0)
+            this.levelText.anchor.set(0, 0)
+
+            this.scoreText.position.set(0, 0)
+            this.levelText.position.set(0, 28)
+            return
+        }
+
         this.scoreText.anchor.set(0, 1)
         this.bestScoreText.anchor.set(0, 1)
         this.levelText.anchor.set(0, 1)
+
+        this.scoreText.position.set(0, 0)
         this.levelText.position.set(215, 0)
         this.bestScoreText.position.set(0, -36)
-
-        this.addChild(this.scoreText, this.levelText, this.bestScoreText)
     }
 
     public setScore(score: number): void {

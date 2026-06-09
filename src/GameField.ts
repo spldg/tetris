@@ -25,16 +25,53 @@ export class GameField extends PIXI.Container {
         super()
         this.pivot.set(GRID_WIDTH * CELL_SIZE / 2, GRID_HEIGHT * CELL_SIZE / 2)
         this.interactive = true
-        this.hitArea = new PIXI.Rectangle(
-            0,
-            0,
-            GRID_WIDTH * CELL_SIZE,
-            GRID_HEIGHT * CELL_SIZE
-        )
-        this.on('pointertap', this.onTap)
         window.addEventListener('keydown', this.onKey)
 
         this.addChild(this.grid, this.shapeGraphics)
+    }
+
+    public rotate(): void {
+        if (!this.currentShape) return
+
+        const prev = this.currentShape.matrix.map(row => [...row])
+
+        this.currentShape.rotate()
+
+        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.matrix = prev
+        }
+    }
+
+    public moveLeft(): void {
+        if (!this.currentShape) return
+
+        this.currentShape.move(-1, 0)
+        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.move(1, 0)
+        }
+
+    }
+
+    public moveRight(): void {
+        if (!this.currentShape) return
+
+        this.currentShape.move(1, 0)
+        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
+            this.currentShape.move(-1, 0)
+        }
+    }
+    public moveDown(): void {
+        if (!this.currentShape) return
+        if (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
+            this.currentShape.move(0, 1)
+        }
+    }
+
+    public hardDrop(): void {
+        if (!this.currentShape) return
+        while (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
+            this.currentShape.y++
+        }
     }
 
     public update(delta: number): void {
@@ -115,30 +152,6 @@ export class GameField extends PIXI.Container {
         }
     }
 
-    private onTap = (e: PIXI.InteractionEvent): void => {
-        if (this.isGameOver || !this.currentShape) return
-
-        const point = e.data.getLocalPosition(this)
-        const width = GRID_WIDTH * CELL_SIZE
-        const height = GRID_HEIGHT * CELL_SIZE
-
-        if (point.y < height * 0.3) {
-            this.rotate()
-            return
-        }
-
-        if (point.y > height * 0.7) {
-            this.hardDrop()
-            return
-        }
-
-        if (point.x < width / 2) {
-            this.moveLeft()
-        } else {
-            this.moveRight()
-        }
-    }
-
     private levelCheck(): void {
         const nextLevel = Math.floor(this.totalLines / 10) + 1
 
@@ -147,49 +160,6 @@ export class GameField extends PIXI.Container {
             levelChangeFx.play()
             this.fallInterval = Math.max(5, FALL_INTERVAL - (this.level - 1) * 2)
             this.emit('levelchange', this.level)
-        }
-    }
-    private rotate(): void {
-        if (!this.currentShape) return
-
-        const prev = this.currentShape.matrix.map(row => [...row])
-
-        this.currentShape.rotate()
-
-        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
-            this.currentShape.matrix = prev
-        }
-    }
-
-    private moveLeft(): void {
-        if (!this.currentShape) return
-
-        this.currentShape.move(-1, 0)
-        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
-            this.currentShape.move(1, 0)
-        }
-
-    }
-
-    private moveRight(): void {
-        if (!this.currentShape) return
-
-        this.currentShape.move(1, 0)
-        if (this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y)) {
-            this.currentShape.move(-1, 0)
-        }
-    }
-    private moveDown(): void {
-        if (!this.currentShape) return
-        if (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
-            this.currentShape.move(0, 1)
-        }
-    }
-
-    private hardDrop(): void {
-        if (!this.currentShape) return
-        while (!this.grid.collide(this.currentShape.matrix, this.currentShape.x, this.currentShape.y + 1)) {
-            this.currentShape.y++
         }
     }
 
