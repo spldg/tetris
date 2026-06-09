@@ -12,7 +12,10 @@ if (!container) {
 }
 container.appendChild(app.view)
 async function bootstrap(): Promise<void> {
-    await document.fonts.load('16px "Press Start 2P"')
+    await document.fonts.load('38px "Press Start 2P"')
+    await document.fonts.load('20px "Silkscreen"')
+    await document.fonts.ready
+
     const gameScene = new GameScene()
     app.stage.addChild(gameScene)
     function resize(): void {
