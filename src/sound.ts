@@ -1,6 +1,6 @@
 import { Howl } from 'howler'
 import bgMusic from '../assets/sounds/backgroundMusic.mp3'
-import lvlChangeFx from '../assets/sounds/nextlevel.mp3'
+import lvlChangeFx from '../assets/sounds/nextLevel.mp3'
 import clearLinefx from '../assets/sounds/clearLineFx.mp3'
 import FX from '../assets/sounds/fx.mp3'
 
