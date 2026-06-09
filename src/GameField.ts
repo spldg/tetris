@@ -93,7 +93,7 @@ export class GameField extends PIXI.Container {
     }
 
     private onKey = (e: KeyboardEvent): void => {
-        switch (e.key) {
+        switch (e.code) {
             case 'ArrowLeft':
             case 'KeyA':
                 this.moveLeft()
