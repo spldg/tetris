@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import { CELL_SIZE } from './constants'
 
 export class NextContainer extends PIXI.Container {
-    private text = new PIXI.Text('Next shape', {
+    public text = new PIXI.Text('Next shape', {
         fontFamily: 'Silkscreen',
         fontSize: 20,
         fill: 0x000000
@@ -24,7 +24,7 @@ export class NextContainer extends PIXI.Container {
                     this.graphics
                         .beginFill(0x000000)
                         .lineStyle({ width: 1, color: 0xFFFFFF, native: true })
-                        .drawRect(j * CELL_SIZE, i * CELL_SIZE + 40, CELL_SIZE, CELL_SIZE)
+                        .drawRect(j * CELL_SIZE, i * CELL_SIZE + 65, CELL_SIZE, CELL_SIZE)
                         .endFill()
                 }
             }

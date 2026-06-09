@@ -51,15 +51,50 @@ export class GameScene extends PIXI.Container {
     }
 
     public resize(width: number, height: number): void {
-        const fieldWidth = CELL_SIZE * GRID_WIDTH + 50
-        const fieldHeight = CELL_SIZE * GRID_HEIGHT + 100
+        const isMobile = width < 520
+        const mobileContentScale = 0.92
+
+        if (isMobile) {
+            this.gameField.scale.set(mobileContentScale)
+            this.scoreText.scale.set(mobileContentScale)
+            this.startMenu.scale.set(mobileContentScale)
+
+            this.scoreText.x = -150
+            this.scoreText.y = -280
+            this.nextContainer.text.text =
+        `Next 
+shape`
+
+            this.nextContainer.x = 145
+            this.nextContainer.y = -280
+            this.nextContainer.scale.set(0.55)
+        } else {
+            this.gameField.scale.set(1)
+            this.scoreText.scale.set(1)
+            this.startMenu.scale.set(1)
+
+            this.scoreText.x = -150
+            this.scoreText.y = -300
+
+            this.nextContainer.x = 200
+            this.nextContainer.y = -200
+            this.nextContainer.scale.set(1)
+        }
+
+        const fieldWidth = isMobile
+            ? CELL_SIZE * GRID_WIDTH * mobileContentScale + 110
+            : CELL_SIZE * GRID_WIDTH + 220
+
+        const fieldHeight = isMobile
+            ? CELL_SIZE * GRID_HEIGHT * mobileContentScale + 100
+            : CELL_SIZE * GRID_HEIGHT + 100
 
         const scale = Math.min(1, width / fieldWidth, height / fieldHeight)
 
         this.scale.set(scale)
 
-        this.x = width / 2
-        this.y = height / 2
+        this.x = width / 2 - (isMobile ? 14 : 0)
+        this.y = height / 2 + (isMobile ? 36 : 0)
     }
 
     private onGameOver = (): void => {
@@ -84,7 +119,7 @@ export class GameScene extends PIXI.Container {
         this.scoreText.setScore(score)
     }
 
-    private onBestScoreChange = (bestScore: number) : void => {
+    private onBestScoreChange = (bestScore: number): void => {
         this.scoreText.setBestScore(bestScore)
         this.startMenu.setBestScore(bestScore)
     }
