@@ -110,7 +110,7 @@ export class GameField extends PIXI.Container {
             case 'KeyS':
                 this.moveDown()
                 break
-            case ' ':
+            case 'Space':
                 this.hardDrop()
         }
     }
