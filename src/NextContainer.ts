@@ -20,7 +20,7 @@ export class NextContainer extends PIXI.Container {
     public draw(matrix: number[][]): void {
         this.graphics.clear()
 
-        const shapeX = this.isMobileLayout ? 155 : 0
+        const shapeX = this.isMobileLayout ? 135 : 0
         const shapeY = this.isMobileLayout ? 0 : 55
 
         for (let i = 0; i < matrix.length; i++) {
@@ -42,6 +42,6 @@ export class NextContainer extends PIXI.Container {
             `Next 
 shape`
             : 'Next shape'
-        this.text.style.fontSize = isMobile ? 32 : 20
+        this.text.style.fontSize = isMobile ? 32 : 16
     }
 }

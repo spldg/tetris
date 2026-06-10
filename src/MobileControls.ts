@@ -6,11 +6,11 @@ export class MobileControls extends PIXI.Container {
 
         this.visible = false
 
-        this.addButton('↺', 0, -70, 'rotate')
+        this.addButton('↺', -35, -70, 'rotate')
         this.addButton('←', -70, 0, 'left')
         this.addButton('↓', 0, 0, 'down')
         this.addButton('→', 70, 0, 'right')
-        this.addButton('DROP', 0, 70, 'drop')
+        this.addButton('DROP', 35, -70, 'drop')
     }
 
     private addButton(label: string, x: number, y: number, eventName: string): void {
