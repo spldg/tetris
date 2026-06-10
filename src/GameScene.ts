@@ -60,7 +60,7 @@ export class GameScene extends PIXI.Container {
 
     public resize(width: number, height: number): void {
         const isMobile = width < 520
-        const mobileFieldOffsetY = 20
+        const mobileFieldOffsetY = -30
 
         if (isMobile) {
             this.scoreText.scale.set(0.6)
@@ -71,14 +71,14 @@ export class GameScene extends PIXI.Container {
             this.restartButton.position.set(0, mobileFieldOffsetY)
 
             this.scoreText.setMobileLayout(true)
-            this.scoreText.position.set(-120, -255)
+            this.scoreText.position.set(-120, -305)
 
             this.nextContainer.setMobileLayout(true)
-            this.nextContainer.position.set(0, -255)
+            this.nextContainer.position.set(0, -305)
             this.nextContainer.scale.set(0.45)
 
             this.mobileControls.visible = true
-            this.mobileControls.position.set(0, 350)
+            this.mobileControls.position.set(0, 300)
             this.mobileControls.scale.set(0.85)
         } else {
 
